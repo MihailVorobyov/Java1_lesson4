@@ -1,6 +1,9 @@
 /**
- * @Author Михаил Воробьёв
+ * @Author РњРёС…Р°РёР» Р’РѕСЂРѕР±СЊС‘РІ
  * @version 1.0
+ * РџСЂРѕРІРµСЂРєР° РІС‹РёРіСЂС‹С€РЅС‹С… РєРѕРјР±РёРЅР°С†РёР№ РїСЂРѕРёР·РІРѕРґРёС‚СЃСЏ РїСЂРё РїРѕРјРѕС‰Рё С†РёРєР»РѕРІ, С‡С‚Рѕ РґР°С‘С‚ РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ СЃРѕР·РґР°РІР°С‚СЊ РёРіСЂРѕРІРѕРµ РїРѕР»Рµ Р»СЋР±РѕРіРѕ
+ * СЂР°Р·РјРµСЂР°.
+ *
  */
 
 import java.util.Arrays;
@@ -10,7 +13,7 @@ import java.util.Scanner;
 public class XAndO {
     private static final char X_DOT = 'X';
     private static final char O_DOT = 'O';
-    private static final char EMPTY_DOT = '•';
+    private static final char EMPTY_DOT = 'вЂў';
     private static final int SIZE = 3;
     private static char[][] map = new char[SIZE][SIZE];
 
@@ -21,7 +24,7 @@ public class XAndO {
         while (true) {
             humanTurn();
             if (winCheck(X_DOT)) {
-                System.out.println("Победил пользователь");
+                System.out.println("РџРѕР±РµРґРёР» РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ");
                 break;
             }
             if (isMapFilled()) {
@@ -30,7 +33,7 @@ public class XAndO {
 
             aiTurn();
             if (winCheck(O_DOT)) {
-                System.out.println("Победил компьютер");
+                System.out.println("РџРѕР±РµРґРёР» РєРѕРјРїСЊСЋС‚РµСЂ");
                 break;
             }
             if (isMapFilled()) {
@@ -42,9 +45,9 @@ public class XAndO {
     public static boolean winCheck(char dot) {
         int winCombo = 0;
 
-        // Проверяем выигрышные комбинации
+        // РџСЂРѕРІРµСЂСЏРµРј РІС‹РёРіСЂС‹С€РЅС‹Рµ РєРѕРјР±РёРЅР°С†РёРё
 
-        // проверяем горизонтали
+        // РїСЂРѕРІРµСЂСЏРµРј РіРѕСЂРёР·РѕРЅС‚Р°Р»Рё
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 if (map[i][j] == dot) {
@@ -56,7 +59,7 @@ public class XAndO {
             winCombo = 0;
         }
 
-        // проверяем вертикали
+        // РїСЂРѕРІРµСЂСЏРµРј РІРµСЂС‚РёРєР°Р»Рё
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 if (map[j][i] == dot) {
@@ -68,7 +71,7 @@ public class XAndO {
             winCombo = 0;
         }
 
-        // проверяем диагонали
+        // РїСЂРѕРІРµСЂСЏРµРј РґРёР°РіРѕРЅР°Р»СЊ СЃР»РµРІР° СЃРІРµСЂС…Сѓ РЅР°РїСЂР°РІРѕ РІРЅРёР·
         for (int i = 0; i < SIZE; i++) {
             if (map[i][i] == dot && ++winCombo == SIZE) {
                 return true;
@@ -76,6 +79,7 @@ public class XAndO {
         }
         winCombo = 0;
 
+        // РїСЂРѕРІРµСЂСЏРµРј РґРёР°РіРѕРЅР°Р»СЊ СЃР»РµРІР° СЃРЅРёСѓР·Сѓ РЅР°РїСЂР°РІРѕ РІРІРµСЂС…
         for (int i = 0; i < SIZE; i++) {
             if (map[SIZE - i - 1][i] == dot && ++winCombo == SIZE) {
                 return true;
@@ -87,7 +91,7 @@ public class XAndO {
 
     public static boolean isMapFilled() {
 
-        // Проверяет, все ли поля заполнены
+        // РџСЂРѕРІРµСЂСЏРµС‚, РІСЃРµ Р»Рё РїРѕР»СЏ Р·Р°РїРѕР»РЅРµРЅС‹
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 if (map[i][j] == EMPTY_DOT) {
@@ -97,14 +101,14 @@ public class XAndO {
         }
 
 //        if (winCheck(X_DOT)) {
-//            System.out.println("Победил пользователь");
+//            System.out.println("РџРѕР±РµРґРёР» РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ");
 //            return true;
 //        } else if (winCheck(O_DOT)) {
-//            System.out.println("Победил компьютер");
+//            System.out.println("РџРѕР±РµРґРёР» РєРѕРјРїСЊСЋС‚РµСЂ");
 //            return true;
 //        }
 
-        System.out.println("Ничья");
+        System.out.println("РќРёС‡СЊСЏ");
         return true;
     }
 
@@ -113,7 +117,7 @@ public class XAndO {
         int yCoordinate = -1;
         Scanner sc = new Scanner(System.in);
         do {
-            System.out.println("Введите коодинаты в формате X Y");
+            System.out.println("Р’РІРµРґРёС‚Рµ РєРѕРѕРґРёРЅР°С‚С‹ РІ С„РѕСЂРјР°С‚Рµ X Y");
             if (sc.hasNextInt()) {
                 xCoordinate = sc.nextInt() - 1;
             }
@@ -146,7 +150,7 @@ public class XAndO {
 
     public static boolean isCellValid(int x, int y) {
         if (x < 0 || x >= SIZE || y < 0 || y >= SIZE) {
-            System.out.println("Неверные координаты!");
+            System.out.println("РќРµРІРµСЂРЅС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹!");
             return false;
         }
         if (map[y][x] != EMPTY_DOT) {
@@ -156,7 +160,7 @@ public class XAndO {
     }
 
     public static void initMap() {
-        // Инициализация пустого массива
+        // РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РїСѓСЃС‚РѕРіРѕ РјР°СЃСЃРёРІР°
         for (char[] c : map) {
             Arrays.fill(c, EMPTY_DOT);
         }
@@ -164,7 +168,7 @@ public class XAndO {
     }
 
     public static void printMap () {
-        // Вывод шапки
+        // Р’С‹РІРѕРґ С€Р°РїРєРё
         System.out.print(" ");
         for (int i = 0; i < SIZE; i++) {
             System.out.print(" " + (i + 1));
@@ -172,7 +176,7 @@ public class XAndO {
 
         System.out.println();
 
-        // Вывод строк
+        // Р’С‹РІРѕРґ СЃС‚СЂРѕРє
         for (int i = 0; i < SIZE; i++) {
             System.out.print((i + 1) + " ");
 
