@@ -18,7 +18,7 @@ public class XAndO {
     private static final char X_DOT = 'X';
     private static final char O_DOT = 'O';
     private static final char EMPTY_DOT = '•';
-    private static final int SIZE = 3;
+    private static final int SIZE = 5;
 
     private static char[][] map = new char[SIZE][SIZE];
     private static Scanner sc = new Scanner(System.in);
@@ -59,8 +59,14 @@ public class XAndO {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 if (map[i][j] == dot) {
-                    if (++winCombo == SIZE) {
-                        return true;
+                    if (SIZE == 5) {
+                        if (++winCombo == SIZE - 1) {
+                            return true;
+                        }
+                    } else {
+                        if (++winCombo == SIZE) {
+                            return true;
+                        }
                     }
                 }
             }
@@ -71,8 +77,14 @@ public class XAndO {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 if (map[j][i] == dot) {
-                    if (++winCombo == SIZE) {
-                        return true;
+                    if (SIZE == 5) {
+                        if (++winCombo == SIZE - 1) {
+                            return true;
+                        }
+                    } else {
+                        if (++winCombo == SIZE) {
+                            return true;
+                        }
                     }
                 }
             }
@@ -81,7 +93,11 @@ public class XAndO {
 
         // проверяем диагональ слева сверху направо вниз
         for (int i = 0; i < SIZE; i++) {
-            if (map[i][i] == dot && ++winCombo == SIZE) {
+            if (SIZE == 5) {
+                if (map[i][i] == dot && ++winCombo == SIZE - 1) {
+                    return true;
+                }
+            } else if (map[i][i] == dot && ++winCombo == SIZE) {
                 return true;
             }
         }
@@ -89,7 +105,11 @@ public class XAndO {
 
         // проверяем диагональ слева сниузу направо вверх
         for (int i = 0; i < SIZE; i++) {
-            if (map[SIZE - i - 1][i] == dot && ++winCombo == SIZE) {
+            if (SIZE == 5) {
+                if (map[SIZE - i - 1][i] == dot && ++winCombo == SIZE - 1) {
+                    return true;
+                }
+            }else if (map[SIZE - i - 1][i] == dot && ++winCombo == SIZE) {
                 return true;
             }
         }
