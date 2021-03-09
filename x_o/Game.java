@@ -126,7 +126,6 @@ public class Game {
         }
 
         gui.setLabelText("Ничья");
-        System.out.println("Ничья");
         return true;
     }
 
@@ -134,7 +133,6 @@ public class Game {
     public  void humanStep(int x, int y) {
         if (isCellValid(x, y)) {
             map[y][x] = X_DOT;
-            printMap();
             gui.setButtonsValues(map);
             humanCheck();
         }
@@ -149,11 +147,7 @@ public class Game {
         } else if (isMapFilled()) {
             gui.setButtonsDisabled();
         } else {
-            try {
-                aiStep();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            aiStep();
         }
     }
 
@@ -167,8 +161,7 @@ public class Game {
     }
 
     /***************************** Логика ИИ *******************************/
-    public  void aiStep() throws InterruptedException {
-        Thread.sleep(300);
+    public  void aiStep() {
         int xCoordinate;
         int yCoordinate;
 
@@ -182,10 +175,8 @@ public class Game {
             } while (!isCellValid(xCoordinate, yCoordinate));
 
             map[yCoordinate][xCoordinate] = O_DOT;
-            System.out.println("Случайный ход компьютера: x = " + (xCoordinate + 1) + ", y =" + (yCoordinate + 1));
         }
 
-        printMap();
         gui.setButtonsValues(map);
     }
 
@@ -213,8 +204,6 @@ public class Game {
                                 map[result[rand]][randomDot] = O_DOT; // randomDot - номер столбца (x),
                                 // [result[rand]] - номер строки (y)
                                 isStepMade = true;
-                                System.out.println("Компьютер сделал хитрый ход #1. x = " + (randomDot + 1) + ", y = " +
-                                        " " + (result[rand] + 1));
                                 break;
                             }
                         }
@@ -236,7 +225,6 @@ public class Game {
                                 map[randomDot][result[rand]] = O_DOT; // randomDot - номер строки (y),
                                 // [result[rand]] - номер столбца (x)
                                 isStepMade = true;
-                                System.out.println("Компьютер сделал хитрый ход #2. x = " + (result[rand] + 1) + ", y = " + (randomDot + 1));
                                 break;
                             }
                         }
@@ -253,7 +241,6 @@ public class Game {
                     } else if (isCellValid(rand, rand)) {
                         map[rand][rand] = O_DOT;
                         isStepMade = true;
-                        System.out.println("Компьютер сделал хитрый ход #3. x = " + (rand + 1) + ", y = " + (rand + 1));
                         break;
                     }
                 }
@@ -268,7 +255,6 @@ public class Game {
                     } else if (isCellValid(rand, (SIZE - rand - 1))) {
                         map[SIZE - rand - 1][rand] = O_DOT;
                         isStepMade = true;
-                        System.out.println("Компьютер сделал хитрый ход #4. x = " + (rand + 1) + ", y = " + (SIZE - rand));
                         break;
                     }
                 }
@@ -396,7 +382,6 @@ public class Game {
 
     public  boolean isCellValid(int x, int y) {
         if (x < 0 || x >= SIZE || y < 0 || y >= SIZE) {
-            System.out.println("Неверные координаты!");
             return false;
         }
         if (map[y][x] != EMPTY_DOT) {
@@ -404,28 +389,5 @@ public class Game {
         }
         return true;
     }
-
-    private void printMap() {
-        // Вывод шапки
-        System.out.print(" ");
-        for (int i = 0; i < SIZE; i++) {
-            System.out.print(" " + (i + 1));
-        }
-
-        System.out.println();
-
-        // Вывод строк
-        for (int i = 0; i < SIZE; i++) {
-            System.out.print((i + 1) + " ");
-
-            for (int j = 0; j < SIZE; j++) {
-                System.out.print(map[i][j] + " ");
-            }
-
-            System.out.println("");
-        }
-        System.out.println("");
-    }
-
 }
 

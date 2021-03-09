@@ -1,17 +1,23 @@
 package x_o;
 
 public class Main {
-	public static void main(String[] args) {
-		int size = 3;
-
-		Main main = new Main();
-		main.go(size);
+	public static int getSIZE() {
+		return SIZE;
 	}
 
-	void go (int size) {
+	private static final int SIZE = 3;
 
-		Game game = new Game(size);
-		GUI gui = new GUI(size, game);
+	static Game game;
+	static GUI gui;
+
+	public static void main(String[] args) {
+		go(SIZE);
+	}
+
+	static void go (int size) {
+
+		game = new Game(size);
+		gui = new GUI(size, game);
 
 		gui.setButtonsValues(game.getMap());
 
