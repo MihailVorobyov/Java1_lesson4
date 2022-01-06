@@ -10,7 +10,7 @@ public class StartGame {
 	}
 	
 	public static void start() {
-		Game game = new Game(FIELD_SIZE);
-		GUI gui = new GUI(FIELD_SIZE, game);
+		GameField gameField = new GameField(FIELD_SIZE);
+		Game game = new Game(gameField);
 	}
 }

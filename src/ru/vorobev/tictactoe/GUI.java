@@ -15,15 +15,17 @@ public class GUI {
 	private JLabel label = new JLabel("Игра началась");
 	
 	private Game game;
+	private GameField gameField;
 	private final int SIZE;
 	private JButton[][] buttons;
 	
-	public GUI(int size, Game game) {
-		this.SIZE = size;
+	public GUI(Game game, GameField gameField) {
 		this.game = game;
+		this.gameField = gameField;
+		this.SIZE = gameField.getField().length;
 		game.setGui(this);
 		initGUI();
-		setButtonsValues(this.game.getMap());
+		setButtonsValues(gameField.getField());
 	}
 	
 	protected void initGUI () {
@@ -45,7 +47,11 @@ public class GUI {
 			}
 		}
 		
-		newGame.addActionListener(e -> StartGame.start());
+		newGame.addActionListener(e -> {
+			this.window.setVisible(false);
+			StartGame.start();
+			this.window = null;
+		});
 		exit.addActionListener(e -> System.exit(0));
 		menu.add(newGame);
 		menu.add(exit);
@@ -54,7 +60,7 @@ public class GUI {
 		mainPanel.add(centerPanel, BorderLayout.CENTER);
 		mainPanel.add(label, BorderLayout.SOUTH);
 		
-		setButtonsValues(game.getMap());
+		setButtonsValues(gameField.getField());
 		
 		window.add(mainPanel);
 		window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

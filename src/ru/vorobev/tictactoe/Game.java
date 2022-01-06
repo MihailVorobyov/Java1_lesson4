@@ -7,22 +7,21 @@ public class Game {
 	
 	private final char X_DOT = 'X';
 	private final char O_DOT = 'O';
-	private final char EMPTY_DOT = '•';
 	
 	private final int SIZE;
 	private GUI gui;
 	
-	private char[][] map;
 	private final Random random = new Random();
 	
-	public Game(int size) {
-		this.SIZE = size;
-		initMap();
+	GameField gameField;
+	
+	public Game(GameField gameField) {
+		this.SIZE = gameField.getField().length;
+		this.gameField = gameField;
+		gui = new GUI(this, gameField);
 	}
 	
-	public char[][] getMap() {
-		return map;
-	}
+	
 	
 	public char getX_DOT() {
 		return X_DOT;
@@ -36,16 +35,9 @@ public class Game {
 		this.gui = g;
 	}
 	
-	//==================== Инициализация игрового поля ====================//
-	public  void initMap() {
-		map = new char[SIZE][SIZE];
-		for (char[] c : map) {
-			Arrays.fill(c, EMPTY_DOT);
-		}
-	}
-	
 	//==================== winCheck ====================//
 	public boolean winCheck(char dot) {
+		char[][] map = gameField.getField();
 		int winCombo = 0;
 		
 		// Проверяем выигрышные комбинации
@@ -98,7 +90,7 @@ public class Game {
 		}
 		winCombo = 0;
 		
-		// проверяем диагональ слева сниузу направо вверх
+		// проверяем диагональ слева снизу направо вверх
 		for (int i = 0; i < SIZE; i++) {
 			if (SIZE == 5) {
 				if (map[SIZE - i - 1][i] == dot && ++winCombo == SIZE - 1) {
@@ -113,26 +105,19 @@ public class Game {
 	}
 	
 	//==================== isMapFilled ====================//
-	public  boolean isMapFilled() {
-		
-		// Проверяет, все ли поля заполнены
-		for (int i = 0; i < SIZE; i++) {
-			for (int j = 0; j < SIZE; j++) {
-				if (map[i][j] == EMPTY_DOT) {
-					return false;
-				}
-			}
-		}
-		
-		gui.setLabelText("Ничья");
-		return true;
-	}
+//	public boolean isMapFilled() {
+//		if (gameField.isFilled()) {
+//			gui.setLabelText("Ничья");
+//			return true;
+//		}
+//		return false;
+//	}
 	
 	//==================== humanStep ====================//
 	public  void humanStep(int x, int y) {
-		if (isCellValid(x, y)) {
-			map[y][x] = X_DOT;
-			gui.setButtonsValues(map);
+		if (gameField.isCellValid(x, y)) {
+			gameField.setCell(x,y,X_DOT);
+			gui.setButtonsValues(gameField.getField());
 			humanCheck();
 		}
 	}
@@ -143,8 +128,9 @@ public class Game {
 		if (winCheck(X_DOT)) {
 			gui.setLabelText("Победил пользователь");
 			gui.setButtonsDisabled();
-		} else if (isMapFilled()) {
+		} else if (gameField.isFilled()) {
 			gui.setButtonsDisabled();
+			gui.setLabelText("Ничья");
 		} else {
 			aiStep();
 		}
@@ -154,8 +140,9 @@ public class Game {
 		if (winCheck(O_DOT)) {
 			gui.setLabelText("Победил компьютер");
 			gui.setButtonsDisabled();
-		} else if (isMapFilled()) {
+		} else if (gameField.isFilled()) {
 			gui.setButtonsDisabled();
+			gui.setLabelText("Ничья");
 		}
 	}
 	
@@ -171,12 +158,12 @@ public class Game {
 			do {
 				xCoordinate = random.nextInt(SIZE);
 				yCoordinate = random.nextInt(SIZE);
-			} while (!isCellValid(xCoordinate, yCoordinate));
+			} while (!gameField.isCellValid(xCoordinate, yCoordinate));
 			
-			map[yCoordinate][xCoordinate] = O_DOT;
+			gameField.setCell(xCoordinate, yCoordinate, O_DOT);
 		}
 		
-		gui.setButtonsValues(map);
+		gui.setButtonsValues(gameField.getField());
 	}
 	
 	public  void trickyStep () {
@@ -199,9 +186,11 @@ public class Game {
 					} else if (result[rand] != -1) {
 						while (true) {
 							randomDot = random.nextInt(SIZE);
-							if (isCellValid(randomDot, result[rand])) {
-								map[result[rand]][randomDot] = O_DOT; // randomDot - номер столбца (x),
+							if (gameField.isCellValid(randomDot, result[rand])) {
+								// randomDot - номер столбца (x),
 								// [result[rand]] - номер строки (y)
+								gameField.setCell(randomDot, result[rand], O_DOT);
+//								map[result[rand]][randomDot] = O_DOT;
 								isStepMade = true;
 								break;
 							}
@@ -220,9 +209,10 @@ public class Game {
 					} else if (result[rand] != -1) {
 						while (true) {
 							randomDot = random.nextInt(SIZE);
-							if (isCellValid(result[rand], randomDot)) {
-								map[randomDot][result[rand]] = O_DOT; // randomDot - номер строки (y),
+							if (gameField.isCellValid(result[rand], randomDot)) {
+								// randomDot - номер строки (y),
 								// [result[rand]] - номер столбца (x)
+								gameField.setCell(result[rand], randomDot, O_DOT);
 								isStepMade = true;
 								break;
 							}
@@ -237,8 +227,8 @@ public class Game {
 					result = checkDiagonalTopToBottom();
 					if (result[0] == -1) {
 						break;
-					} else if (isCellValid(rand, rand)) {
-						map[rand][rand] = O_DOT;
+					} else if (gameField.isCellValid(rand, rand)) {
+						gameField.setCell(rand, rand, O_DOT);
 						isStepMade = true;
 						break;
 					}
@@ -251,8 +241,8 @@ public class Game {
 					result = checkDiagonalBottomToTop();
 					if (result[0] == -1) {
 						break;
-					} else if (isCellValid(rand, (SIZE - rand - 1))) {
-						map[SIZE - rand - 1][rand] = O_DOT;
+					} else if (gameField.isCellValid(rand, (SIZE - rand - 1))) {
+						gameField.setCell(rand, SIZE - rand - 1, O_DOT);
 						isStepMade = true;
 						break;
 					}
@@ -264,10 +254,9 @@ public class Game {
 	}
 	
 	
-	public  boolean humanCanWin () {
+	public boolean humanCanWin () {
 		int[] result = new int[SIZE];
 		Arrays.fill(result, -1);
-		
 		
 		result = checkRows();
 		if (result[0] != -1) {
@@ -303,9 +292,9 @@ public class Game {
 		for (int y = 0; y < SIZE; y++) {
 			humanWinCombo = 0;
 			for (int x = 0; x < SIZE; x++) {
-				if (map[y][x] == X_DOT) {
+				if (gameField.getCell(x,y) == X_DOT) {
 					humanWinCombo++;
-				} else if (map[y][x] == O_DOT) {
+				} else if (gameField.getCell(x,y) == O_DOT) {
 					humanWinCombo = 0;
 					break;
 				}
@@ -327,9 +316,9 @@ public class Game {
 		for (int x = 0; x < SIZE; x++) {
 			humanWinCombo = 0;
 			for (int y = 0; y < SIZE; y++) {
-				if (map[y][x] == X_DOT) {
+				if (gameField.getCell(x,y) == X_DOT) {
 					humanWinCombo++;
-				} else if (map[y][x] == O_DOT) {
+				} else if (gameField.getCell(x,y) == O_DOT) {
 					humanWinCombo = 0;
 					break;
 				}
@@ -346,9 +335,9 @@ public class Game {
 		int[] topToBottomDiagonal = {-1};
 		
 		for (int x = 0; x < SIZE; x++) {
-			if (map[x][x] == X_DOT) {
+			if (gameField.getCell(x,x) == X_DOT) {
 				humanWinCombo++;
-			} else if (map[x][x] == O_DOT) {
+			} else if (gameField.getCell(x,x) == O_DOT) {
 				humanWinCombo = 0;
 				break;
 			}
@@ -364,9 +353,9 @@ public class Game {
 		int[] bottomToTopDiagonal = {-1};
 		
 		for (int x = 0; x < SIZE; x++) {
-			if (map[SIZE - x -1][x] == X_DOT) {
+			if (gameField.getCell(x,SIZE - x -1) == X_DOT) {
 				humanWinCombo++;
-			} else if (map[SIZE - x -1][x] == O_DOT) {
+			} else if (gameField.getCell(x,SIZE - x -1) == O_DOT) {
 				humanWinCombo = 0;
 				break;
 			}
@@ -377,15 +366,6 @@ public class Game {
 		return bottomToTopDiagonal;
 	}
 	
-	/*************************** Конец логики ИИ *********************************/
-	
-	public  boolean isCellValid(int x, int y) {
-		if (x < 0 || x >= SIZE || y < 0 || y >= SIZE) {
-			return false;
-		}
-		if (map[y][x] != EMPTY_DOT) {
-			return false;
-		}
-		return true;
-	}
+	//==================== Конец логики ИИ ====================//
+
 }
