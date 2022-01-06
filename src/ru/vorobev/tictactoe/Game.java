@@ -23,15 +23,6 @@ public class Game {
 		winChecker = new WinChecker(gameField);
 	}
 	
-	//==================== isMapFilled ====================//
-//	public boolean isMapFilled() {
-//		if (gameField.isFilled()) {
-//			gui.setLabelText("Ничья");
-//			return true;
-//		}
-//		return false;
-//	}
-	
 	//==================== humanStep ====================//
 	public  void humanStep(int x, int y) {
 		if (gameField.isCellValid(x, y)) {
@@ -42,7 +33,7 @@ public class Game {
 	}
 	
 	public void humanCheck () {
-		if (winChecker.winCheck(X_DOT)) {
+		if (winChecker.checkForWin(X_DOT)) {
 			gui.setLabelText("Победил пользователь");
 			gui.setButtonsDisabled();
 		} else if (gameField.isFilled()) {
@@ -54,7 +45,7 @@ public class Game {
 	}
 	
 	public void aiCheck () {
-		if (winChecker.winCheck(O_DOT)) {
+		if (winChecker.checkForWin(O_DOT)) {
 			gui.setLabelText("Победил компьютер");
 			gui.setButtonsDisabled();
 		} else if (gameField.isFilled()) {
@@ -83,6 +74,7 @@ public class Game {
 		gui.setButtonsValues(gameField.getField());
 	}
 	
+	// Хитрый ход
 	public  void trickyStep () {
 		int[] result;
 		boolean isStepMade = false;
@@ -152,7 +144,7 @@ public class Game {
 				}
 				
 				// ********** ИИ ходит по диагонали лево-низ вправо-вверх **********
-			} else if (rnd == 3) {
+			} else {
 				while (true) {
 					rand = random.nextInt(SIZE);
 					result = checkDiagonalBottomToTop();
@@ -197,7 +189,6 @@ public class Game {
 		
 		return false;
 	}
-	
 	
 	public  int[] checkRows(){
 		int humanWinCombo = 0;

@@ -11,7 +11,7 @@ public class WinChecker {
 	}
 	
 	//==================== winCheck ====================//
-	boolean winCheck(char dot) {
+	boolean checkForWin(char dot) {
 		char[][] map = gameField.getField();
 		int winCombo = 0;
 		
