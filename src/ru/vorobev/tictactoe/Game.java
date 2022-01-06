@@ -9,99 +9,18 @@ public class Game {
 	private final char O_DOT = 'O';
 	
 	private final int SIZE;
-	private GUI gui;
+	private final GUI gui;
 	
 	private final Random random = new Random();
 	
 	GameField gameField;
+	WinChecker winChecker;
 	
 	public Game(GameField gameField) {
 		this.SIZE = gameField.getField().length;
 		this.gameField = gameField;
 		gui = new GUI(this, gameField);
-	}
-	
-	
-	
-	public char getX_DOT() {
-		return X_DOT;
-	}
-	
-	public char getO_DOT() {
-		return O_DOT;
-	}
-	
-	public void setGui (GUI g) {
-		this.gui = g;
-	}
-	
-	//==================== winCheck ====================//
-	public boolean winCheck(char dot) {
-		char[][] map = gameField.getField();
-		int winCombo = 0;
-		
-		// Проверяем выигрышные комбинации
-		
-		// проверяем горизонтали
-		for (int i = 0; i < SIZE; i++) {
-			for (int j = 0; j < SIZE; j++) {
-				if (map[i][j] == dot) {
-					if (SIZE == 5) {
-						if (++winCombo == SIZE - 1) {
-							return true;
-						}
-					} else {
-						if (++winCombo == SIZE) {
-							return true;
-						}
-					}
-				}
-			}
-			winCombo = 0;
-		}
-		
-		// проверяем вертикали
-		for (int i = 0; i < SIZE; i++) {
-			for (int j = 0; j < SIZE; j++) {
-				if (map[j][i] == dot) {
-					if (SIZE == 5) {
-						if (++winCombo == SIZE - 1) {
-							return true;
-						}
-					} else {
-						if (++winCombo == SIZE) {
-							return true;
-						}
-					}
-				}
-			}
-			winCombo = 0;
-		}
-		
-		// проверяем диагональ слева сверху направо вниз
-		for (int i = 0; i < SIZE; i++) {
-			if (SIZE == 5) {
-				if (map[i][i] == dot && ++winCombo == SIZE - 1) {
-					return true;
-				}
-			} else if (map[i][i] == dot && ++winCombo == SIZE) {
-				return true;
-			}
-		}
-		winCombo = 0;
-		
-		// проверяем диагональ слева снизу направо вверх
-		for (int i = 0; i < SIZE; i++) {
-			if (SIZE == 5) {
-				if (map[SIZE - i - 1][i] == dot && ++winCombo == SIZE - 1) {
-					return true;
-				}
-			}else if (map[SIZE - i - 1][i] == dot && ++winCombo == SIZE) {
-				return true;
-			}
-		}
-		
-		return false;
+		winChecker = new WinChecker(gameField);
 	}
 	
 	//==================== isMapFilled ====================//
@@ -122,10 +41,8 @@ public class Game {
 		}
 	}
 	
-	
-	
 	public void humanCheck () {
-		if (winCheck(X_DOT)) {
+		if (winChecker.winCheck(X_DOT)) {
 			gui.setLabelText("Победил пользователь");
 			gui.setButtonsDisabled();
 		} else if (gameField.isFilled()) {
@@ -137,7 +54,7 @@ public class Game {
 	}
 	
 	public void aiCheck () {
-		if (winCheck(O_DOT)) {
+		if (winChecker.winCheck(O_DOT)) {
 			gui.setLabelText("Победил компьютер");
 			gui.setButtonsDisabled();
 		} else if (gameField.isFilled()) {

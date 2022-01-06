@@ -6,16 +6,16 @@ import java.awt.*;
 public class GUI {
 	
 	private JFrame window = new JFrame();
-	private JPanel mainPanel = new JPanel();
-	private JPanel centerPanel = new JPanel();
-	private JMenuBar menuBar = new JMenuBar();
-	private JMenu menu = new JMenu("Меню");
-	private JMenuItem newGame = new JMenuItem("Новая игра");
-	private JMenuItem exit = new JMenuItem("Выход");
-	private JLabel label = new JLabel("Игра началась");
+	private final JPanel mainPanel = new JPanel();
+	private final JPanel centerPanel = new JPanel();
+	private final JMenuBar menuBar = new JMenuBar();
+	private final JMenu menu = new JMenu("Меню");
+	private final JMenuItem newGame = new JMenuItem("Новая игра");
+	private final JMenuItem exit = new JMenuItem("Выход");
+	private final JLabel label = new JLabel("Игра началась");
 	
-	private Game game;
-	private GameField gameField;
+	private final Game game;
+	private final GameField gameField;
 	private final int SIZE;
 	private JButton[][] buttons;
 	
@@ -23,7 +23,6 @@ public class GUI {
 		this.game = game;
 		this.gameField = gameField;
 		this.SIZE = gameField.getField().length;
-		game.setGui(this);
 		initGUI();
 		setButtonsValues(gameField.getField());
 	}
@@ -40,9 +39,7 @@ public class GUI {
 				int finalI = i;
 				
 				buttons[i][j] = new JButton();
-				buttons[i][j].addActionListener(e -> {
-					game.humanStep(finalJ, finalI);
-				});
+				buttons[i][j].addActionListener(e -> game.humanStep(finalJ, finalI));
 				centerPanel.add(buttons[i][j]);
 			}
 		}

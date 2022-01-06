@@ -2,7 +2,7 @@ package ru.vorobev.tictactoe;
 
 public class StartGame {
 	
-	//TODO если все поля заполнены - ничья
+	//TODO если все поля заполнены - ничья (4x4)
 	private static final int FIELD_SIZE = 4;
 	
 	public static void main(String[] args) {
