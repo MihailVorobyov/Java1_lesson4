@@ -23,13 +23,13 @@ public class GUI {
 		this.game = game;
 		game.setGui(this);
 		initGUI();
-		
+		setButtonsValues(this.game.getMap());
 	}
 	
 	protected void initGUI () {
 		
 		mainPanel.setLayout(new BorderLayout());
-		centerPanel.setLayout(new GridLayout(3, 3));
+		centerPanel.setLayout(new GridLayout(SIZE, SIZE));
 		
 		buttons = new JButton[SIZE][SIZE];
 		for (int i = 0; i < SIZE; i++) {
@@ -45,7 +45,7 @@ public class GUI {
 			}
 		}
 		
-		newGame.addActionListener(e -> Main.go(Main.getSIZE()));
+		newGame.addActionListener(e -> StartGame.start());
 		exit.addActionListener(e -> System.exit(0));
 		menu.add(newGame);
 		menu.add(exit);

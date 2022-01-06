@@ -9,11 +9,11 @@ public class Game {
 	private final char O_DOT = 'O';
 	private final char EMPTY_DOT = '•';
 	
-	private int SIZE;
+	private final int SIZE;
 	private GUI gui;
 	
 	private char[][] map;
-	private Random random = new Random();
+	private final Random random = new Random();
 	
 	public Game(int size) {
 		this.SIZE = size;
@@ -36,16 +36,15 @@ public class Game {
 		this.gui = g;
 	}
 	
-	/************************_initMap_****************************/
+	//==================== Инициализация игрового поля ====================//
 	public  void initMap() {
-		// Инициализация пустого массива
 		map = new char[SIZE][SIZE];
 		for (char[] c : map) {
 			Arrays.fill(c, EMPTY_DOT);
 		}
 	}
 	
-	/************************_winCheck_****************************/
+	//==================== winCheck ====================//
 	public boolean winCheck(char dot) {
 		int winCombo = 0;
 		
@@ -113,7 +112,7 @@ public class Game {
 		return false;
 	}
 	
-	/************************_isMapFilled_****************************/
+	//==================== isMapFilled ====================//
 	public  boolean isMapFilled() {
 		
 		// Проверяет, все ли поля заполнены
@@ -129,7 +128,7 @@ public class Game {
 		return true;
 	}
 	
-	/************************_humanStep_****************************/
+	//==================== humanStep ====================//
 	public  void humanStep(int x, int y) {
 		if (isCellValid(x, y)) {
 			map[y][x] = X_DOT;
@@ -160,7 +159,7 @@ public class Game {
 		}
 	}
 	
-	/***************************** Логика ИИ *******************************/
+	//==================== Логика ИИ ====================//
 	public  void aiStep() {
 		int xCoordinate;
 		int yCoordinate;

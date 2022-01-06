@@ -2,23 +2,15 @@ package ru.vorobev.tictactoe;
 
 public class StartGame {
 	
-	private static final int SIZE = 3;
-	static Game game;
-	static GUI gui;
+	//TODO если все поля заполнены - ничья
+	private static final int FIELD_SIZE = 4;
 	
 	public static void main(String[] args) {
-		go(SIZE);
-	}
-	public static int getSIZE() {
-		return SIZE;
+		start();
 	}
 	
-	static void go (int size) {
-		
-		game = new Game(size);
-		gui = new GUI(size, game);
-		
-		gui.setButtonsValues(game.getMap());
-		
+	public static void start() {
+		Game game = new Game(FIELD_SIZE);
+		GUI gui = new GUI(FIELD_SIZE, game);
 	}
 }
