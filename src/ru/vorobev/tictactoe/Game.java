@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class Game {
 	
-	private final char X_DOT = 'X';
+//	private final char X_DOT = 'X';
 	private final char O_DOT = 'O';
 	
 	private final int SIZE;
@@ -24,25 +24,25 @@ public class Game {
 	}
 	
 	//==================== humanStep ====================//
-	public  void humanStep(int x, int y) {
-		if (gameField.isCellValid(x, y)) {
-			gameField.setCell(x,y,X_DOT);
-			gui.setButtonsValues(gameField.getField());
-			humanCheck();
-		}
-	}
+//	public  void humanStep(int x, int y) {
+//		if (gameField.isCellValid(x, y)) {
+//			gameField.setCell(x,y,X_DOT);
+//			gui.setButtonsValues(gameField.getField());
+//			humanCheck();
+//		}
+//	}
 	
-	public void humanCheck () {
-		if (winChecker.checkForWin(X_DOT)) {
-			gui.setLabelText("Победил пользователь");
-			gui.setButtonsDisabled();
-		} else if (gameField.isFilled()) {
-			gui.setButtonsDisabled();
-			gui.setLabelText("Ничья");
-		} else {
-			aiStep();
-		}
-	}
+//	public void humanCheck () {
+//		if (winChecker.checkForWin(X_DOT)) {
+//			gui.setLabelText("Победил пользователь");
+//			gui.setButtonsDisabled();
+//		} else if (gameField.isFilled()) {
+//			gui.setButtonsDisabled();
+//			gui.setLabelText("Ничья");
+//		} else {
+//			aiStep();
+//		}
+//	}
 	
 	public void aiCheck () {
 		if (winChecker.checkForWin(O_DOT)) {
@@ -166,27 +166,27 @@ public class Game {
 	public boolean humanCanWin () {
 		int[] result = new int[SIZE];
 		Arrays.fill(result, -1);
-		
+
 		result = checkRows();
 		if (result[0] != -1) {
 			return true;
 		}
-		
+
 		result = checkColumns();
 		if (result[0] != -1) {
 			return true;
 		}
-		
+
 		result = checkDiagonalTopToBottom();
 		if (result[0] != -1) {
 			return true;
 		}
-		
+
 		result = checkDiagonalBottomToTop();
 		if (result[0] != -1) {
 			return true;
 		}
-		
+
 		return false;
 	}
 	

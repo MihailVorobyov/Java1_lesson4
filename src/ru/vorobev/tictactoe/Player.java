@@ -2,8 +2,7 @@ package ru.vorobev.tictactoe;
 
 public interface Player {
 	
-	void makeStep();
-	void check();
-	boolean canWin();
+	void makeStep(int x, int y);
+	void checkForWin();
 
 }
