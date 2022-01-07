@@ -5,13 +5,12 @@ public class WinChecker {
 	private final GameField gameField;
 	private final int SIZE;
 	
-	public WinChecker(GameField gameField) {
-		this.gameField = gameField;
+	public WinChecker() {
+		this.gameField = Util.getGameField();
 		SIZE = gameField.getField().length;
 	}
 	
-	//==================== winCheck ====================//
-	boolean checkForWin(char dot) {
+	boolean isWin(char dot) {
 		char[][] map = gameField.getField();
 		int winCombo = 0;
 		
@@ -71,7 +70,7 @@ public class WinChecker {
 				if (map[SIZE - i - 1][i] == dot && ++winCombo == SIZE - 1) {
 					return true;
 				}
-			}else if (map[SIZE - i - 1][i] == dot && ++winCombo == SIZE) {
+			} else if (map[SIZE - i - 1][i] == dot && ++winCombo == SIZE) {
 				return true;
 			}
 		}

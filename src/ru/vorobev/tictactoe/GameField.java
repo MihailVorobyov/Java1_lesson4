@@ -3,15 +3,15 @@ package ru.vorobev.tictactoe;
 import java.util.Arrays;
 
 public class GameField {
-	private char[][] field;
+	private final char[][] field;
 	private final char EMPTY_DOT = '•';
 	
-	public GameField(int fieldSize) {
+	public GameField() {
+		int fieldSize = Util.getFieldSize();
 		this.field = new char[fieldSize][fieldSize];
 		initField();
 	}
 	
-	//==================== Инициализация игрового поля ====================//
 	public  void initField() {
 		for (char[] c : field) {
 			Arrays.fill(c, EMPTY_DOT);
@@ -19,7 +19,7 @@ public class GameField {
 	}
 	
 	public char[][] getField() {
-		return Arrays.copyOf(field, field.length);
+		return field;
 	}
 	
 	public void setCell(int x, int y, char symbol) {

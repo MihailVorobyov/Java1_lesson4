@@ -14,17 +14,14 @@ public class GUI {
 	private final JMenuItem exit = new JMenuItem("Выход");
 	private final JLabel label = new JLabel("Игра началась");
 	
-	private final Game game;
 	private final GameField gameField;
 	private final int SIZE;
 	private JButton[][] buttons;
 	
-	public GUI(Game game, GameField gameField) {
-		this.game = game;
-		this.gameField = gameField;
-		this.SIZE = gameField.getField().length;
+	public GUI() {
+		this.gameField = Util.getGameField();
+		this.SIZE = Util.getFieldSize();
 		initGUI();
-		setButtonsValues(gameField.getField());
 	}
 	
 	protected void initGUI () {
@@ -39,15 +36,15 @@ public class GUI {
 				int finalI = i;
 				
 				buttons[i][j] = new JButton();
-				buttons[i][j].addActionListener(e -> game.humanStep(finalJ, finalI));
+				buttons[i][j].addActionListener(e -> Util.getGame().play(finalJ, finalI));
 				centerPanel.add(buttons[i][j]);
 			}
 		}
 		
 		newGame.addActionListener(e -> {
-			this.window.setVisible(false);
+			window.setVisible(false);
 			StartGame.start();
-			this.window = null;
+			window = null;
 		});
 		exit.addActionListener(e -> System.exit(0));
 		menu.add(newGame);
@@ -57,7 +54,7 @@ public class GUI {
 		mainPanel.add(centerPanel, BorderLayout.CENTER);
 		mainPanel.add(label, BorderLayout.SOUTH);
 		
-		setButtonsValues(gameField.getField());
+		setButtonsValues();
 		
 		window.add(mainPanel);
 		window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -65,7 +62,8 @@ public class GUI {
 		window.setVisible(true);
 	}
 	
-	protected void setButtonsValues (char[][] map) {
+	protected void setButtonsValues () {
+		char[][] map = gameField.getField();
 		for (int i = 0; i < SIZE; i++) {
 			for (int j = 0; j < SIZE; j++) {
 				buttons[i][j].setText("" + map[i][j]);

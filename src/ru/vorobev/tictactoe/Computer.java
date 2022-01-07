@@ -3,28 +3,25 @@ package ru.vorobev.tictactoe;
 import java.util.Arrays;
 import java.util.Random;
 
-public class Computer implements Player {
+public class Computer {
 	
 	private final int SIZE;
 	private final char O_DOT = 'O';
 	private final char X_DOT = 'X';
 	
 	private final GameField gameField;
-	private final WinChecker winChecker;
-	private final GUI gui;
+//	private final GUI gui;
 	
 	private final Random random;
 	
-	public Computer(int size, GameField gameField, WinChecker winChecker, GUI gui) {
-		SIZE = size;
-		this.gameField = gameField;
-		this.winChecker = winChecker;
-		this.gui = gui;
+	public Computer() {
+		SIZE = Util.getFieldSize();
+		this.gameField = Util.getGameField();
+//		this.gui = Util.getGui(); //TODO
 		this.random = new Random();
 	}
-	
-	@Override
-	public void makeStep(int x, int y) {
+
+	public void makeStep() {
 		int xCoordinate;
 		int yCoordinate;
 		
@@ -40,18 +37,7 @@ public class Computer implements Player {
 			gameField.setCell(xCoordinate, yCoordinate, O_DOT);
 		}
 		
-		gui.setButtonsValues(gameField.getField());
-	}
-	
-	@Override
-	public void checkForWin() {
-		if (winChecker.checkForWin(O_DOT)) {
-			gui.setLabelText("Победил компьютер");
-			gui.setButtonsDisabled();
-		} else if (gameField.isFilled()) {
-			gui.setButtonsDisabled();
-			gui.setLabelText("Ничья");
-		}
+//		gui.setButtonsValues(gameField.getField());
 	}
 	
 	private void trickyStep () {
@@ -138,7 +124,7 @@ public class Computer implements Player {
 			}
 		}
 		
-		checkForWin();
+//		checkForWin();
 	}
 	
 	private boolean humanCanWin () {
@@ -161,11 +147,7 @@ public class Computer implements Player {
 		}
 		
 		result = checkDiagonalBottomToTop();
-		if (result[0] != -1) {
-			return true;
-		}
-		
-		return false;
+		return result[0] != -1;
 	}
 	
 	private int[] checkRows(){

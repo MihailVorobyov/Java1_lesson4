@@ -1,26 +1,55 @@
 package ru.vorobev.tictactoe;
 
-import java.util.Arrays;
-import java.util.Random;
-
 public class Game {
+
+//	private final Random random = new Random();
 	
-//	private final char X_DOT = 'X';
-	private final char O_DOT = 'O';
-	
-	private final int SIZE;
+	private final GameField gameField;
 	private final GUI gui;
+	private final WinChecker winChecker;
+
+	private final Human human;
+	private final Computer computer;
 	
-	private final Random random = new Random();
+	public Game() {
+		this.gameField = Util.getGameField();
+		this.gui = Util.getGui();
+		this.winChecker = Util.getWinChecker();
+		this.human = Util.getHuman();
+		this.computer = Util.getComputer();
+	}
 	
-	GameField gameField;
-	WinChecker winChecker;
+	void play(int hx, int hy) {
+		if (!human.makeStep(hx, hy)) {
+			return;
+		}
+		gui.setButtonsValues();
+		if (checkForWin(Util.getX_DOT())) {
+			return;
+		}
+		
+		computer.makeStep();
+		gui.setButtonsValues();
+		if (checkForWin(Util.getO_DOT())) {
+			return;
+		}
+	}
 	
-	public Game(GameField gameField) {
-		this.SIZE = gameField.getField().length;
-		this.gameField = gameField;
-		gui = new GUI(this, gameField);
-		winChecker = new WinChecker(gameField);
+	private boolean checkForWin(char character) {
+		if (winChecker.isWin(character)) {
+			if (character == Util.getX_DOT()) {
+				gui.setLabelText("Победил пользователь");
+			} else {
+				gui.setLabelText("Победил компьютер");
+			}
+			gui.setButtonsDisabled();
+			return true;
+		} else if (gameField.isFilled()) {
+			gui.setLabelText("Ничья");
+			gui.setButtonsDisabled();
+			return true;
+		}
+		return false;
 	}
 	
 	//==================== humanStep ====================//
