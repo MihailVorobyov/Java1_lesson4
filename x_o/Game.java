@@ -1,56 +1,52 @@
-/**
- * @Author Михаил Воробьёв
- * @version 1.2
- *
- * "Искуственный интелект" проверяет выигрышные комбинации человека и мешает ему хитрыми ходами :)
- *
- * Проверка выигрышных комбинаций производится при помощи циклов, что даёт возможность создавать игровое поле любого
- * размера.
- *
- *
- */
+package x_o;
 
 import java.util.Arrays;
 import java.util.Random;
-import java.util.Scanner;
 
-public class XAndO {
-    private static final char X_DOT = 'X';
-    private static final char O_DOT = 'O';
-    private static final char EMPTY_DOT = '•';
-    private static final int SIZE = 5;
+public class Game {
 
-    private static char[][] map = new char[SIZE][SIZE];
-    private static Scanner sc = new Scanner(System.in);
-    private static Random random = new Random();
+    private final char X_DOT = 'X';
+    private final char O_DOT = 'O';
+    private final char EMPTY_DOT = '•';
 
-    public static void main(String[] args) throws InterruptedException {
+    private int SIZE;
+    private GUI gui;
 
+    private char[][] map;
+    private Random random = new Random();
+
+    public Game(int size) {
+        this.SIZE = size;
         initMap();
-
-        while (true) {
-            humanStep();
-            if (winCheck(X_DOT)) {
-                System.out.println("Победил пользователь");
-                break;
-            }
-            if (isMapFilled()) {
-                break;
-            }
-
-            aiStep();
-            if (winCheck(O_DOT)) {
-                System.out.println("Победил компьютер");
-                break;
-            }
-            if (isMapFilled()) {
-                break;
-            }
-        }
-        sc.close();
     }
 
-    public static boolean winCheck(char dot) {
+    public char[][] getMap() {
+        return map;
+    }
+
+    public char getX_DOT() {
+        return X_DOT;
+    }
+
+    public char getO_DOT() {
+        return O_DOT;
+    }
+
+    public void setGui (GUI g) {
+        this.gui = g;
+    }
+
+    /************************_initMap_****************************/
+    public  void initMap() {
+        // Инициализация пустого массива
+         map = new char[SIZE][SIZE];
+        for (char[] c : map) {
+            Arrays.fill(c, EMPTY_DOT);
+        }
+    }
+
+    /************************_winCheck_****************************/
+    public boolean winCheck(char dot) {
         int winCombo = 0;
 
         // Проверяем выигрышные комбинации
@@ -117,7 +113,8 @@ public class XAndO {
         return false;
     }
 
-    public static boolean isMapFilled() {
+    /************************_isMapFilled_****************************/
+    public  boolean isMapFilled() {
 
         // Проверяет, все ли поля заполнены
         for (int i = 0; i < SIZE; i++) {
@@ -128,33 +125,43 @@ public class XAndO {
             }
         }
 
-        System.out.println("Ничья");
+        gui.setLabelText("Ничья");
         return true;
     }
 
-    public static void humanStep() {
-        int xCoordinate = -1;
-        int yCoordinate = -1;
+    /************************_humanStep_****************************/
+    public  void humanStep(int x, int y) {
+        if (isCellValid(x, y)) {
+            map[y][x] = X_DOT;
+            gui.setButtonsValues(map);
+            humanCheck();
+        }
+    }
 
-        do {
-            System.out.println("Введите коодинаты в формате X Y");
-            if (sc.hasNextInt()) {
-                xCoordinate = sc.nextInt() - 1;
-            }
-            if (sc.hasNextInt()) {
-                yCoordinate = sc.nextInt() - 1;
-            }
-            sc.nextLine();
 
-        } while (!isCellValid(xCoordinate, yCoordinate));
 
-        map[yCoordinate][xCoordinate] = X_DOT;
-        printMap();
+    public void humanCheck () {
+        if (winCheck(X_DOT)) {
+            gui.setLabelText("Победил пользователь");
+            gui.setButtonsDisabled();
+        } else if (isMapFilled()) {
+            gui.setButtonsDisabled();
+        } else {
+            aiStep();
+        }
+    }
+
+    public void aiCheck () {
+        if (winCheck(O_DOT)) {
+            gui.setLabelText("Победил компьютер");
+            gui.setButtonsDisabled();
+        } else if (isMapFilled()) {
+            gui.setButtonsDisabled();
+        }
     }
 
     /***************************** Логика ИИ *******************************/
-    public static void aiStep() throws InterruptedException {
-        Thread.sleep(300);
+    public  void aiStep() {
         int xCoordinate;
         int yCoordinate;
 
@@ -168,13 +175,12 @@ public class XAndO {
             } while (!isCellValid(xCoordinate, yCoordinate));
 
             map[yCoordinate][xCoordinate] = O_DOT;
-            System.out.println("Случайный ход компьютера: x = " + (xCoordinate + 1) + ", y =" + (yCoordinate + 1));
         }
 
-        printMap();
+        gui.setButtonsValues(map);
     }
 
-    public static void trickyStep () {
+    public  void trickyStep () {
         int[] result;
         boolean isStepMade = false;
         int rnd;
@@ -198,8 +204,6 @@ public class XAndO {
                                 map[result[rand]][randomDot] = O_DOT; // randomDot - номер столбца (x),
                                 // [result[rand]] - номер строки (y)
                                 isStepMade = true;
-                                System.out.println("Компьютер сделал хитрый ход #1. x = " + (randomDot + 1) + ", y = " +
-                                        " " + (result[rand] + 1));
                                 break;
                             }
                         }
@@ -221,7 +225,6 @@ public class XAndO {
                                 map[randomDot][result[rand]] = O_DOT; // randomDot - номер строки (y),
                                 // [result[rand]] - номер столбца (x)
                                 isStepMade = true;
-                                System.out.println("Компьютер сделал хитрый ход #2. x = " + (result[rand] + 1) + ", y = " + (randomDot + 1));
                                 break;
                             }
                         }
@@ -238,7 +241,6 @@ public class XAndO {
                     } else if (isCellValid(rand, rand)) {
                         map[rand][rand] = O_DOT;
                         isStepMade = true;
-                        System.out.println("Компьютер сделал хитрый ход #3. x = " + (rand + 1) + ", y = " + (rand + 1));
                         break;
                     }
                 }
@@ -253,16 +255,17 @@ public class XAndO {
                     } else if (isCellValid(rand, (SIZE - rand - 1))) {
                         map[SIZE - rand - 1][rand] = O_DOT;
                         isStepMade = true;
-                        System.out.println("Компьютер сделал хитрый ход #4. x = " + (rand + 1) + ", y = " + (SIZE - rand));
                         break;
                     }
                 }
             }
         }
+
+        aiCheck();
     }
 
 
-    public static boolean humanCanWin () {
+    public  boolean humanCanWin () {
         int[] result = new int[SIZE];
         Arrays.fill(result, -1);
 
@@ -291,7 +294,7 @@ public class XAndO {
     }
 
 
-    public static int[] checkRows(){
+    public  int[] checkRows(){
         int humanWinCombo = 0;
         int rowIndex = 0;
 
@@ -315,7 +318,7 @@ public class XAndO {
         return row;
     }
     
-    public static int[] checkColumns() {
+    public  int[] checkColumns() {
         int humanWinCombo = 0;
         int columnIndex = 0;
 
@@ -339,7 +342,7 @@ public class XAndO {
         return column;
     }
 
-    public static int[] checkDiagonalTopToBottom() {
+    public  int[] checkDiagonalTopToBottom() {
         int humanWinCombo = 0;
         int[] topToBottomDiagonal = {-1};
 
@@ -357,7 +360,7 @@ public class XAndO {
         return topToBottomDiagonal;
     }
 
-    public static int[] checkDiagonalBottomToTop() {
+    public  int[] checkDiagonalBottomToTop() {
         int humanWinCombo = 0;
         int[] bottomToTopDiagonal = {-1};
 
@@ -377,45 +380,14 @@ public class XAndO {
 
     /*************************** Конец логики ИИ *********************************/
 
-    public static boolean isCellValid(int x, int y) {
+    public  boolean isCellValid(int x, int y) {
         if (x < 0 || x >= SIZE || y < 0 || y >= SIZE) {
-            System.out.println("Неверные координаты!");
             return false;
         }
         if (map[y][x] != EMPTY_DOT) {
             return false;
         }
         return true;
-    }
-
-    public static void initMap() {
-        // Инициализация пустого массива
-        for (char[] c : map) {
-            Arrays.fill(c, EMPTY_DOT);
-        }
-        printMap();
-    }
-
-    public static void printMap () {
-        // Вывод шапки
-        System.out.print(" ");
-        for (int i = 0; i < SIZE; i++) {
-            System.out.print(" " + (i + 1));
-        }
-
-        System.out.println();
-
-        // Вывод строк
-        for (int i = 0; i < SIZE; i++) {
-            System.out.print((i + 1) + " ");
-
-            for (int j = 0; j < SIZE; j++) {
-                System.out.print(map[i][j] + " ");
-            }
-
-            System.out.println("");
-        }
-        System.out.println("");
     }
 }
 
