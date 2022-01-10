@@ -6,8 +6,8 @@ public class WinChecker {
 	private final int SIZE;
 	
 	public WinChecker() {
-		this.gameField = Util.getGameField();
-		SIZE = gameField.getField().length;
+		this.gameField = GameField.getInstance();
+		SIZE = Settings.getFieldSize();
 	}
 	
 	boolean isWin(char dot) {

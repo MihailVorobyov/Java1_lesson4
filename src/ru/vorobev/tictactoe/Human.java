@@ -7,7 +7,7 @@ public class Human {
 	private final GameField gameField;
 	
 	public Human() {
-		this.gameField = Util.getGameField();
+		this.gameField = GameField.getInstance();
 	}
 	
 	public boolean makeStep(int x, int y) {

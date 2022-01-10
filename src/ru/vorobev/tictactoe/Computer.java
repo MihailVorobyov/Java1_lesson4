@@ -6,18 +6,18 @@ import java.util.Random;
 public class Computer {
 	
 	private final int SIZE;
-	private final char O_DOT = 'O';
-	private final char X_DOT = 'X';
+	private final char O_DOT;
+	private final char X_DOT;
 	
 	private final GameField gameField;
-//	private final GUI gui;
 	
 	private final Random random;
 	
 	public Computer() {
-		SIZE = Util.getFieldSize();
-		this.gameField = Util.getGameField();
-//		this.gui = Util.getGui(); //TODO
+		SIZE = Settings.getFieldSize();
+		O_DOT = Settings.getO_DOT();
+		X_DOT = Settings.getX_DOT();
+		this.gameField = GameField.getInstance();
 		this.random = new Random();
 	}
 
@@ -37,7 +37,6 @@ public class Computer {
 			gameField.setCell(xCoordinate, yCoordinate, O_DOT);
 		}
 		
-//		gui.setButtonsValues(gameField.getField());
 	}
 	
 	private void trickyStep () {

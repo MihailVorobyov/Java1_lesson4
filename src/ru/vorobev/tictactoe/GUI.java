@@ -17,10 +17,13 @@ public class GUI {
 	private final GameField gameField;
 	private final int SIZE;
 	private JButton[][] buttons;
+	private final Game game;
 	
 	public GUI() {
-		this.gameField = Util.getGameField();
-		this.SIZE = Util.getFieldSize();
+		this.gameField = GameField.getInstance();
+		this.SIZE = Settings.getFieldSize();
+		this.game = new Game(this);
+		
 		initGUI();
 	}
 	
@@ -36,12 +39,13 @@ public class GUI {
 				int finalI = i;
 				
 				buttons[i][j] = new JButton();
-				buttons[i][j].addActionListener(e -> Util.getGame().play(finalJ, finalI));
+				buttons[i][j].addActionListener(e -> game.play(finalJ, finalI));
 				centerPanel.add(buttons[i][j]);
 			}
 		}
 		
 		newGame.addActionListener(e -> {
+			gameField.reset();
 			window.setVisible(false);
 			StartGame.start();
 			window = null;

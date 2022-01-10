@@ -6,10 +6,23 @@ public class GameField {
 	private final char[][] field;
 	private final char EMPTY_DOT = '•';
 	
+	private static GameField gameField;
+	
+	public static GameField getInstance() {
+		if (gameField == null) {
+			gameField = new GameField();
+		}
+		return gameField;
+	}
+	
 	public GameField() {
-		int fieldSize = Util.getFieldSize();
+		int fieldSize = Settings.getFieldSize();
 		this.field = new char[fieldSize][fieldSize];
 		initField();
+	}
+	
+	public void reset() {
+		gameField = null;
 	}
 	
 	public  void initField() {

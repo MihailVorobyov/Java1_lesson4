@@ -7,7 +7,6 @@ public class StartGame {
 	}
 	
 	public static void start() {
-		Util.initialize();
-		Game game = new Game();
+		new GUI();
 	}
 }
